@@ -1,0 +1,17 @@
+{
+  "name": "todo-app",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter @todo/api --filter @todo/web dev",
+    "build": "pnpm --filter @todo/api build && pnpm --filter @todo/web build",
+    "lint": "pnpm typecheck",
+    "typecheck": "pnpm --filter @todo/api typecheck && pnpm --filter @todo/web typecheck",
+    "db:generate": "pnpm --filter @todo/api db:generate",
+    "db:migrate": "pnpm --filter @todo/api db:migrate"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
