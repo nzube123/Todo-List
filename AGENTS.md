@@ -11,7 +11,7 @@ Technology in this repository:
 - Workspace/package manager: pnpm (`pnpm-workspace.yaml`)
 - Frontend: React, TypeScript, Vite, Tailwind CSS (`apps/web`)
 - Backend: Node.js, Express, TypeScript (`apps/api`)
-- Persistence: SQLite through Prisma (`apps/api/prisma/schema.prisma`)
+- Persistence: PostgreSQL/Neon through Prisma (`apps/api/prisma/schema.prisma`)
 - Backend request validation: Zod
 
 Use this stack. Do not introduce Next.js, another database/service, Docker, npm, or yarn.
@@ -19,7 +19,7 @@ Use this stack. Do not introduce Next.js, another database/service, Docker, npm,
 ## Architecture rules
 
 - Preserve the pnpm workspace and existing `apps/web` and `apps/api` boundaries. Inspect the current files before changing or adding architecture; do not restructure just for preference.
-- The web app owns presentation, interactions, and browser-side input feedback. It must never connect to SQLite or Prisma.
+- The web app owns presentation, interactions, and browser-side input feedback. It must never connect to PostgreSQL/Neon or Prisma.
 - The API owns HTTP handling, authoritative validation, business rules, and all database access. Keep Prisma access in backend services/libraries, not React components or browser code.
 - Keep React components focused on rendering and UI interactions. Use the existing API service modules (`apps/web/src/services/todo.service.ts`, `note.service.ts`) for network access rather than scattering `fetch` calls through components.
 - On the backend, preserve the existing separation: routes define endpoints, controllers translate HTTP requests/responses, services contain application/data-access logic, schemas validate input, middleware handles shared concerns, and `src/lib` contains shared infrastructure.
@@ -49,12 +49,12 @@ Use this stack. Do not introduce Next.js, another database/service, Docker, npm,
 - Handle invalid input, invalid IDs, missing resources, and unexpected failures centrally. Return actionable messages without stack traces, database details, secrets, or other sensitive information.
 - Keep CORS origin configuration intentional and environment-driven where appropriate; do not use a permissive production wildcard.
 
-## SQLite and Prisma rules
+## PostgreSQL and Prisma rules
 
 - Keep every database operation on the API server and use Prisma's safe query API; do not construct SQL from untrusted strings.
-- Preserve data integrity and existing records. Schema changes require an appropriate Prisma migration and consideration of existing databases; do not use destructive resets or delete/mutate the SQLite database to make a change pass.
-- Keep the SQLite provider and local database workflow. Ensure setup/generation/migration commands still work from a clean checkout.
-- Do not commit `.env` or expose environment values. Treat the local SQLite database as generated/runtime data according to `.gitignore`.
+- Preserve data integrity and existing records. Schema changes require an appropriate Prisma migration and consideration of existing databases; do not use destructive resets or delete/mutate the Postgres database to make a change pass.
+- Keep the PostgreSQL provider and a Postgres-compatible local workflow. Ensure setup/generation/migration commands still work from a clean checkout.
+- Do not commit `.env` or expose environment values. Treat the local database connection string as runtime configuration and keep it out of the repo.
 
 ## API rules
 

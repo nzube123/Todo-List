@@ -1,6 +1,6 @@
 # Daybook — Todo + Notes
 
-A local-first productivity app built with React, TypeScript, Vite, Express, Prisma, SQLite, Zod, and Tailwind CSS. Your data is stored in a SQLite file; no database server is required.
+A local-first productivity app built with React, TypeScript, Vite, Express, Prisma, PostgreSQL, Zod, and Tailwind CSS. Your data is stored in a Postgres-compatible database such as Neon.
 
 ## Requirements
 
@@ -14,14 +14,17 @@ git clone <repository>
 cd todo-app
 pnpm install
 cp .env.example .env
+# Replace the placeholder Neon/Postgres URL in .env before running migrations
 pnpm db:generate
 pnpm db:migrate
 pnpm dev
 ```
 
-Open http://localhost:5173. The API runs on http://localhost:5000. The SQLite database is created at `apps/api/prisma/dev.db` when migrations run.
+For a live Neon/Postgres deployment, run `pnpm db:deploy` after the connection string is set in the host environment.
 
-If your shell does not provide `cp`, create a root `.env` containing the values from `.env.example`. The sample defaults work for local development.
+Open http://localhost:5173. The API runs on http://localhost:5000. The PostgreSQL database is configured through `DATABASE_URL`.
+
+If your shell does not provide `cp`, create a root `.env` containing the values from `.env.example` and set a valid Neon/Postgres connection string.
 
 ## Commands
 
@@ -29,7 +32,8 @@ If your shell does not provide `cp`, create a root `.env` containing the values 
 | ------------------ | ------------------------------------------------ |
 | `pnpm install`     | Install workspace dependencies                   |
 | `pnpm db:generate` | Generate the Prisma client                       |
-| `pnpm db:migrate`  | Create or apply the local SQLite schema          |
+| `pnpm db:migrate`  | Create or apply the Postgres schema in dev mode  |
+| `pnpm db:deploy`   | Apply the committed Postgres migration set       |
 | `pnpm dev`         | Run the API and web development servers together |
 | `pnpm typecheck`   | Check strict TypeScript in both apps             |
 | `pnpm lint`        | Lint application source files                    |
@@ -48,4 +52,4 @@ All endpoints return `{ "success": true, "data": ... }` on success and a consist
 
 ## Configuration
 
-Copy `.env.example` to `.env` to override `DATABASE_URL`, `PORT`, or `FRONTEND_ORIGIN`. The defaults are configured for local development.
+Copy `.env.example` to `.env` and replace the sample Postgres/Neon URL with your actual `DATABASE_URL`. Set `PORT` and `FRONTEND_ORIGIN` for your environment.

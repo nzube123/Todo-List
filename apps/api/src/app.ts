@@ -8,7 +8,7 @@ import { noteRouter } from './routes/note.routes.js';
 import { todoRouter } from './routes/todo.routes.js';
 
 dotenv.config({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../../.env') });
-process.env.DATABASE_URL ??= 'file:./dev.db';
+process.env.DATABASE_URL;
 
 export const app = express();
 const allowedOrigin = process.env.FRONTEND_ORIGIN ?? 'http://localhost:5173';
